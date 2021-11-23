@@ -1,0 +1,93 @@
+* {
+    font-family: helvetica;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    background: black;
+}
+
+.buttons-div {
+    height: 400px;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    bottom: 0;
+}
+
+.table-top {
+    display: flex;
+    height: 600px;
+    width: 100%;
+    background-color: rgb(53, 101, 77);
+    border-bottom-left-radius: 300px;
+    border-bottom-right-radius: 300px;
+    border-bottom: 40px solid rgb(82, 58, 40);
+}
+
+.card-spot {
+    display: flex;
+    position: absolute;
+    height: 220px;
+    width: 170px;
+    border: 8px solid white;
+    border-radius: 10px;
+}
+
+.card {
+    width: 8.0em;
+    height: 11em;
+}
+
+#messageBox {
+    display: flex;
+    height: 200px;
+    width: 30%;
+    background-color: rgb(255, 253, 84);
+    margin-top: 10px;
+    margin-left: 10px;
+    border: 4px solid black;
+    border-radius: 20px;
+}
+
+#deck {
+    position: absolute;
+    display: flex;
+    right: 7%;
+    top: 7%;
+}
+
+#dealerSpot {
+    margin-top: 20px;
+}
+
+#playerSpot {
+    margin-top: 340px;
+}
+
+#deal {
+    display: flex;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+}
+
+#restart {
+    position: absolute;
+    top: 40%;
+    left: 15%;
+}
+
+#hit {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+}
+
+#stand {
+    position: absolute;
+    top: 40%;
+    right: 15%;
+}
