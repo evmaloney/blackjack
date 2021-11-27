@@ -14,19 +14,33 @@ const values = ['02', '03', '04', '05', '06', '07', '08', '09', '10', 'J', 'Q', 
 const orderedDeck = buildOrderedDeck();
 
 /*----- app's state (variables) -----*/
-let dealerHand, playerHand, readyDeck, shuffledDeckArr
+let dealerHand, playerHand, readyDeck, shuffledDeckArr, dealtCards
 
 /*----- cached element references -----*/
 const dealerCards = document.getElementById('dealerSpot');
 const playerCards = document.getElementById('playerSpot');
 
 /*----- event listeners -----*/
-document.getElementById('deal').addEventListener('click', () => {
-    console.log(readyDeck[0], readyDeck[1])
+const deal = document.getElementById('deal').addEventListener('click', () => {
+    dealtCards = [];
+    dealtCards.push(readyDeck.splice(0, 4));
+    let card1 = dealtCards[0][0].face;
+    let card2 = dealtCards[0][1].face;
+    let card3 = dealtCards[0][2].face;
+    let card4 = dealtCards[0][3].face;
+    let firstCard = document.getElementById('playerCard1');
+    let secondCard = document.getElementById('dealerCard1');
+    let thirdCard = document.getElementById('playerCard2');
+    let fourthCard = document.getElementById('dealerCard2');
+    firstCard.classList.add("card", card1);
+    secondCard.classList.add("card", "back");
+    thirdCard.classList.add("card", card3);
+    fourthCard.classList.add("card", card4);
+
 });
 
 document.getElementById('hit').addEventListener('click', () => {
-
+    // let card5 = dealtCards[0][5].face;
 });
 
 document.getElementById('stand').addEventListener('click', () => {
@@ -41,7 +55,6 @@ document.getElementById('restart').addEventListener('click', () => {
 function init() {
     document.getElementById('messageBox').remove();
     readyDeck = getShuffledDeck();
-    console.log(readyDeck);
     render();
 }
 
