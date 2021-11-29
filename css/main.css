@@ -51,6 +51,10 @@ body {
     margin-left: 10px;
     border: 4px solid black;
     border-radius: 20px;
+    padding: 10px 5px 0 5px;
+    font-size: 20px;
+    font-weight: 900;
+    text-align: center;
 }
 
 #deck {
@@ -71,15 +75,36 @@ body {
 #playerCard2 {
     display: flex;
     position: absolute;
-    bottom: 60px;
-    left: 60px;
+    bottom: 40px;
+    left: 40px;
+}
+
+#playerCard3 {
+    display: flex;
+    position: absolute;
+    bottom: 70px;
+    left: 70px;
+}
+
+#playerCard4 {
+    display: flex;
+    position: absolute;
+    bottom: 100px;
+    left: 100px;
+}
+
+#playerCard5 {
+    display: flex;
+    position: absolute;
+    bottom: 130px;
+    left: 130px;
 }
 
 #dealerCard2 {
     display: flex;
     position: absolute;
-    top: 60px;
-    right: 60px;
+    top: 40px;
+    right: 40px;
 }
 
 #deal {
