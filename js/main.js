@@ -28,10 +28,11 @@ const message = document.getElementById('messageBox')
 dealBtn.addEventListener('click', deal)
 hitBtn.addEventListener('click', hit)
 standBtn.addEventListener('click', stand)
-restartBtn.addEventListener('click', init)
 
 /*----- functions -----*/
 function init() {
+    hitBtn.disabled = true;
+    standBtn.disabled = true;
     readyDeck = getShuffledDeck();
 }
 
@@ -59,6 +60,9 @@ function getShuffledDeck() {
 }
 
 function deal() {
+    dealBtn.disabled = true;
+    hitBtn.disabled = false;
+    standBtn.disabled = false;
     const cardsForPlayer = readyDeck.splice(0, 2)
     const cardsForDealer = readyDeck.splice(0, 2)
     cardsForPlayer.forEach(card => player.hand.push(card))
@@ -77,6 +81,8 @@ function hit() {
 }
 
 function stand() {
+    hitBtn.disabled = true;
+    standBtn.disabled = true;
     while (dealerScore < 17) {
         dealer.hand.push(readyDeck.splice(0, 1)[0])
         dealerScore = getScore(dealer.hand)
@@ -114,6 +120,7 @@ function render() {
     dealer.hand.forEach(card => {
         const cardEl = document.createElement('div')
         cardEl.classList.add('card', card.face);
+        // cardEl.classList.add('card', 'back')
         dealerCards.append(cardEl)
     })
 }

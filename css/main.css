@@ -110,24 +110,54 @@ body {
 #deal {
     display: flex;
     position: absolute;
+    justify-content: center;
+    align-items: center;
+    height: 140px;
+    width: 140px;
+    border-radius: 50%;
     top: 10%;
     left: 10%;
-}
-
-#restart {
-    position: absolute;
-    top: 40%;
-    left: 15%;
+    font-size: 20px;
+    font-weight: 500;
+    color:rgb(255, 253, 84);
+    background-color: red;
+    border: 5px solid black;
 }
 
 #hit {
     position: absolute;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+    width: 130px;
+    border-radius: 10%;
     top: 10%;
     right: 10%;
+    font-size: 20px;
+    font-weight: 500;
+    color:blue;
+    background-color: orange;
+    border: 5px solid black;
 }
 
 #stand {
     position: absolute;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+    width: 130px;
+    border-radius: 50%;
     top: 40%;
     right: 15%;
+    font-size: 20px;
+    font-weight: 500;
+    color: turquoise;
+    background-color: purple;
+    border: 5px solid black;
+}
+
+#deal:disabled, #hit:disabled, #stand:disabled{
+    background: grey;
+    color: white;
+    border: 0;
 }
