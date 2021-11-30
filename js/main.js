@@ -7,19 +7,13 @@ const player = {
     hand: []
 }
 
-// if (hand > 21) {
-//     bust
-// }
-
 const suits = ['h', 'd', 's', 'c']
 const values = ['02', '03', '04', '05', '06', '07', '08', '09', '10', 'J', 'Q', 'K', 'A']
 const orderedDeck = buildOrderedDeck();
 
 /*----- app's state (variables) -----*/
-let readyDeck, shuffledDeckArr, playerScore, dealerScore;
+let readyDeck, shuffledDeckArr, playerScore, dealerScore, winner, loser;
 let bust = false
-let win = false
-
 
 /*----- cached element references -----*/
 const dealerCards = document.getElementById('dealerSpot');
@@ -38,7 +32,6 @@ restartBtn.addEventListener('click', init)
 
 /*----- functions -----*/
 function init() {
-    // message.remove();
     readyDeck = getShuffledDeck();
 }
 
@@ -70,51 +63,47 @@ function deal() {
     const cardsForDealer = readyDeck.splice(0, 2)
     cardsForPlayer.forEach(card => player.hand.push(card))
     cardsForDealer.forEach(card => dealer.hand.push(card))
-    getPlayerScore();
-    getDealerScore();
+    playerScore = getScore(player.hand);
+    dealerScore = getScore(dealer.hand);
     checkBlackjack();
-    checkWin();
     render();
 }
 
 function hit() {
-    // hit func should just add one more card to the players hand
-    // in state and then immediately check if the player busted
-    // Render function will check the state of the player's hand and
-    // update DOM
     player.hand.push(readyDeck.splice(0, 1)[0])
-    getPlayerScore()
-    checkWin()
+    playerScore = getScore(player.hand)
+    checkBust()
     render()
 }
 
 function stand() {
-    // stand = true
     while (dealerScore < 17) {
         dealer.hand.push(readyDeck.splice(0, 1)[0])
-        getDealerScore()
+        dealerScore = getScore(dealer.hand)
+        render()
     }
     checkWin()
-    render()
 }
 
-function getPlayerScore() {
-    let score = player.hand.reduce((acc, newCard) => acc + newCard.numberValue, 0)
-    playerScore = score;
-}
-
-function getDealerScore() {
-    let score = dealer.hand.reduce((acc, newCard) => acc + newCard.numberValue, 0)
-    dealerScore = score;
+function getScore(hand) {
+    let score = 0
+    let aces = 0
+    hand.forEach(card => {
+        score += card.numberValue
+        if (card.numberValue === 11) {
+            aces++;
+        }
+    })
+    while (score > 21 && aces) {
+        score -= 10;
+        aces--;
+    }
+    return score;
 }
 
 function render() {
     playerCards.innerHTML = ''
     dealerCards.innerHTML = ''
-    // check the dealers hand and players hand and render cards
-    // create a div and assign it the attributes relevant to the
-    // current card in the iteration
-    // check if there's a winner and render appropriate message
 
     player.hand.forEach(card => {
         const cardEl = document.createElement('div')
@@ -127,14 +116,6 @@ function render() {
         cardEl.classList.add('card', card.face);
         dealerCards.append(cardEl)
     })
-
-    if (bust) {
-        showBustScreen()
-    }
-
-    // if (win) {
-    //     showWinScreen()
-    // }
 }
 
 function checkBlackjack() {
@@ -144,16 +125,38 @@ function checkBlackjack() {
 }
 
 function checkWin() {
-    if (checkBust()) {
-        bust = true
+    checkBust()
+    if (bust === false) {
+        compareHands()
     }
 }
 
 function checkBust() {
     if (playerScore > 21) {
-        return true
+        bust = true
+        winner = "dealer"
+        loser = "player"
+        showBustScreen()
     } else if (dealerScore > 21) {
+        bust = true
+        winner = "player"
+        loser = "dealer"
+        showBustScreen()
+    }
+}
 
+function compareHands() {
+    if (playerScore === dealerScore) {
+        winner = "tie"
+        showTieScreen()
+    } else if (playerScore > dealerScore) {
+        winner = "player"
+        loser = "dealer"
+        showWinScreen()
+    } else {
+        winner = "dealer"
+        loser = "player"
+        showLoseScreen()
     }
 }
 
@@ -162,19 +165,19 @@ function showBlackjackScreen() {
 }
 
 function showBustScreen() {
-    message.innerText = 'Sorry, you busted!'
+    message.innerText = `The ${loser} busted! The ${winner} wins!`
 }
 
 function showTieScreen() {
-    message.innerText = "Ah, well. You tied with the dealer."
+    message.innerText = `It's a ${winner}!`
 }
 
 function showWinScreen() {
-    message.innerText = 'Congrats! You win beat the dealer!'
+    message.innerText = `Congrats! The ${winner} beat the ${loser}!`
 }
 
 function showLoseScreen() {
-    message.innerText = 'Sorry, you lose to the dealer.'
+    message.innerText = `Sorry, the ${winner} beat the ${loser}.`
 }
 
 init();
