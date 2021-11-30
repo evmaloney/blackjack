@@ -16,7 +16,10 @@ const values = ['02', '03', '04', '05', '06', '07', '08', '09', '10', 'J', 'Q', 
 const orderedDeck = buildOrderedDeck();
 
 /*----- app's state (variables) -----*/
-let readyDeck, shuffledDeckArr, dealtCards
+let readyDeck, shuffledDeckArr, playerScore, dealerScore;
+let bust = false
+let win = false
+
 
 /*----- cached element references -----*/
 const dealerCards = document.getElementById('dealerSpot');
@@ -26,10 +29,6 @@ const hitBtn = document.getElementById('hit')
 const standBtn = document.getElementById('stand')
 const restartBtn = document.getElementById('restart')
 const message = document.getElementById('messageBox')
-let firstCard = document.getElementById('playerCard1');
-let secondCard = document.getElementById('dealerCard1');
-let thirdCard = document.getElementById('playerCard2');
-let fourthCard = document.getElementById('dealerCard2');
 
 /*----- event listeners -----*/
 dealBtn.addEventListener('click', deal)
@@ -41,9 +40,6 @@ restartBtn.addEventListener('click', init)
 function init() {
     // message.remove();
     readyDeck = getShuffledDeck();
-    // dealtCards = [];
-    // dealtCards.push(readyDeck.splice(0, 10));
-    render();
 }
 
 function buildOrderedDeck() {
@@ -70,12 +66,13 @@ function getShuffledDeck() {
 }
 
 function deal() {
-    // Deal function should update the player and dealers hands with
-    // the card objects in an array. The render function will check
-    // this array and update the DOM
-    player.hand.push(readyDeck.splice(0, 10)[0])
-    // dealer.hand.push(readyDeck.splice(0, 2)[0])
-    // message.append()
+    const cardsForPlayer = readyDeck.splice(0, 2)
+    const cardsForDealer = readyDeck.splice(0, 2)
+    cardsForPlayer.forEach(card => player.hand.push(card))
+    cardsForDealer.forEach(card => dealer.hand.push(card))
+    getPlayerScore();
+    getDealerScore();
+    checkBlackjack();
     checkWin();
     render();
 }
@@ -85,45 +82,99 @@ function hit() {
     // in state and then immediately check if the player busted
     // Render function will check the state of the player's hand and
     // update DOM
-    let hitCard = dealtCards[0][i].face;
-    let card6 = dealtCards[0][5].face;
-    let card7 = dealtCards[0][6].face;
-    let fifthCard = document.getElementById('playerCard3');
-    let sixthCard = document.getElementById('playerCard4');
-    let seventhCard = document.getElementById('playerCard5');
-    fifthCard.classList.add("card", hitCard);
-    sixthCard.classList.add("card", card6);
-    seventhCard.classList.add("card", card7);
+    player.hand.push(readyDeck.splice(0, 1)[0])
+    getPlayerScore()
+    checkWin()
+    render()
 }
 
 function stand() {
-    // Initiate dealer's turn (check if he's at 17, if not keep hitting)
-    // Once dealer is done, compare scores, update if win, tie, or loss
-    // Render function will check the state of dealer's hand as well
-    // as state of winner and render appropriate cards and message to
-    // the DOM
-    let card2 = dealtCards[0][1].face;
-    let secondCard = document.getElementById('dealerCard1');
-    secondCard.classList.replace("back", card2);
+    // stand = true
+    while (dealerScore < 17) {
+        dealer.hand.push(readyDeck.splice(0, 1)[0])
+        getDealerScore()
+    }
+    checkWin()
+    render()
 }
 
-function checkWin() {
-    // instead of updating DOM, update the state of the winner based on
-    // the state of the dealer's hand and player's hand
-    //     if (pHand === 21) {
-    //         message.innerText = "You hit Blackjack! You won!!!"
-    //     } else {
-    //         message.innerText = "You have not hit Blackjack. You have yet to win."
-    //     }
+function getPlayerScore() {
+    let score = player.hand.reduce((acc, newCard) => acc + newCard.numberValue, 0)
+    playerScore = score;
+}
+
+function getDealerScore() {
+    let score = dealer.hand.reduce((acc, newCard) => acc + newCard.numberValue, 0)
+    dealerScore = score;
 }
 
 function render() {
+    playerCards.innerHTML = ''
+    dealerCards.innerHTML = ''
     // check the dealers hand and players hand and render cards
+    // create a div and assign it the attributes relevant to the
+    // current card in the iteration
     // check if there's a winner and render appropriate message
-    // firstCard.classList.add("card", card1);
-    // secondCard.classList.add("card", "back");
-    // thirdCard.classList.add("card", card3);
-    // fourthCard.classList.add("card", card4);
+
+    player.hand.forEach(card => {
+        const cardEl = document.createElement('div')
+        cardEl.classList.add('card', card.face);
+        playerCards.append(cardEl)
+    })
+
+    dealer.hand.forEach(card => {
+        const cardEl = document.createElement('div')
+        cardEl.classList.add('card', card.face);
+        dealerCards.append(cardEl)
+    })
+
+    if (bust) {
+        showBustScreen()
+    }
+
+    // if (win) {
+    //     showWinScreen()
+    // }
+}
+
+function checkBlackjack() {
+    if (playerScore === 21) {
+        showBlackjackScreen();
+    }
+}
+
+function checkWin() {
+    if (checkBust()) {
+        bust = true
+    }
+}
+
+function checkBust() {
+    if (playerScore > 21) {
+        return true
+    } else if (dealerScore > 21) {
+
+    }
+}
+
+function showBlackjackScreen() {
+    message.innerText = 'Congrats! You hit Blackjack. You win!'
+}
+
+function showBustScreen() {
+    message.innerText = 'Sorry, you busted!'
+}
+
+function showTieScreen() {
+    message.innerText = "Ah, well. You tied with the dealer."
+}
+
+function showWinScreen() {
+    message.innerText = 'Congrats! You win beat the dealer!'
+}
+
+function showLoseScreen() {
+    message.innerText = 'Sorry, you lose to the dealer.'
 }
 
 init();
