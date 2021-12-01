@@ -29,17 +29,28 @@ body {
 
 .card {
     font-size: 34px;
+    margin: 0;
+    min-width: 4.0em;
 }
 
 .card-spot {
     display: flex;
     position: absolute;
     height: 220px;
-    width: 170px;
+    width: 20em;
     border: 8px solid white;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
+    max-width: 20em;
+}
+
+.cardWrapperEl {
+    overflow: hidden;
+}
+
+.cardWrapperEl:last-child {
+    overflow: visible;
 }
 
 #messageBox {
@@ -55,6 +66,8 @@ body {
     font-size: 20px;
     font-weight: 900;
     text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 
 #deck {

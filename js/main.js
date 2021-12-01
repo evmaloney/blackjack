@@ -112,29 +112,36 @@ function render() {
     dealerCards.innerHTML = ''
 
     player.hand.forEach(card => {
+        const cardWrapperEl = document.createElement('div')
+        cardWrapperEl.classList.add('cardWrapperEl')
         const cardEl = document.createElement('div')
         cardEl.classList.add('card', card.face);
-        playerCards.append(cardEl)
+        cardWrapperEl.append(cardEl)
+        playerCards.append(cardWrapperEl)
     })
 
+
     dealer.hand.forEach(card => {
+        const cardWrapperEl = document.createElement('div')
+        cardWrapperEl.classList.add('cardWrapperEl')
         const cardEl = document.createElement('div')
         cardEl.classList.add('card', card.face);
-        // cardEl.classList.add('card', 'back')
-        dealerCards.append(cardEl)
+        cardWrapperEl.append(cardEl)
+        dealerCards.append(cardWrapperEl)
     })
 }
 
 function checkBlackjack() {
     if (playerScore === 21) {
         showBlackjackScreen();
+        endgame();
     }
 }
 
 function checkWin() {
-    checkBust()
+    checkBust();
     if (bust === false) {
-        compareHands()
+        compareHands();
     }
 }
 
@@ -143,12 +150,13 @@ function checkBust() {
         bust = true
         winner = "dealer"
         loser = "player"
-        showBustScreen()
+        showBustScreen();
+        endgame();
     } else if (dealerScore > 21) {
         bust = true
         winner = "player"
         loser = "dealer"
-        showBustScreen()
+        showBustScreen();
     }
 }
 
@@ -167,6 +175,10 @@ function compareHands() {
     }
 }
 
+function endgame() {
+    hitBtn.disabled = true;
+    standBtn.disabled = true;
+}
 function showBlackjackScreen() {
     message.innerText = 'Congrats! You hit Blackjack. You win!'
 }
