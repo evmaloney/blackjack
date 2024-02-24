@@ -9,6 +9,10 @@ body {
     background: black;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 .buttons-div {
     height: 400px;
     width: 100%;
@@ -151,8 +155,9 @@ body {
     border: 5px solid black;
 }
 
-#deal:disabled, #hit:disabled, #stand:disabled{
+#deal:disabled, #hit:disabled, #stand:disabled, #restart:disabled{
     background: grey;
     color: white;
     border: 0;
+    cursor: not-allowed;
 }

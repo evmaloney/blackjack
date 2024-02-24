@@ -28,11 +28,13 @@ const message = document.getElementById('messageBox')
 dealBtn.addEventListener('click', deal)
 hitBtn.addEventListener('click', hit)
 standBtn.addEventListener('click', stand)
+restartBtn.addEventListener('click', restart)
 
 /*----- functions -----*/
 function init() {
     hitBtn.disabled = true;
     standBtn.disabled = true;
+    restartBtn.disabled = true;
     readyDeck = getShuffledDeck();
 }
 
@@ -63,6 +65,7 @@ function deal() {
     dealBtn.disabled = true;
     hitBtn.disabled = false;
     standBtn.disabled = false;
+    restartBtn.disabled = false;
     const cardsForPlayer = readyDeck.splice(0, 2)
     const cardsForDealer = readyDeck.splice(0, 2)
     cardsForPlayer.forEach(card => player.hand.push(card))
@@ -89,6 +92,22 @@ function stand() {
         render()
     }
     checkWin()
+}
+
+function restart() {
+    dealBtn.disabled = false;
+    message.innerHTML = '';
+    dealer.hand = [];
+    player.hand = [];
+    render();
+    init();
+    // cute nub code
+    // const cardWrapperEl = document.remove('div')
+    // cardWrapperEl.classList.remove('cardWrapperEl')
+    // const cardEl = document.remove('div')
+    // cardEl.classList.remove('card', card.face);
+    // cardWrapperEl.remove(cardEl)
+    // playerCards.remove(cardWrapperEl)
 }
 
 function getScore(hand) {
