@@ -72,6 +72,7 @@ button:hover {
     text-align: center;
     justify-content: center;
     align-items: center;
+    visibility: hidden;
 }
 
 #deck {
@@ -121,6 +122,7 @@ button:hover {
     color: whitesmoke;
     background-color: black;
     border: 5px solid black;
+
 }
 
 #hit {

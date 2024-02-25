@@ -14,6 +14,7 @@ const orderedDeck = buildOrderedDeck();
 /*----- app's state (variables) -----*/
 let readyDeck, shuffledDeckArr, playerScore, dealerScore, winner, loser;
 let bust = false
+let seeDealerCard = false;
 
 /*----- cached element references -----*/
 const dealerCards = document.getElementById('dealerSpot');
@@ -32,6 +33,7 @@ restartBtn.addEventListener('click', restart)
 
 /*----- functions -----*/
 function init() {
+    message.style.visibility = "hidden";
     hitBtn.disabled = true;
     standBtn.disabled = true;
     restartBtn.disabled = true;
@@ -62,6 +64,7 @@ function getShuffledDeck() {
 }
 
 function deal() {
+    message.style.visibility = "visible";
     dealBtn.disabled = true;
     hitBtn.disabled = false;
     standBtn.disabled = false;
@@ -99,6 +102,8 @@ function restart() {
     message.innerHTML = '';
     dealer.hand = [];
     player.hand = [];
+    bust = false;
+    seeDealerCard = false;
     render();
     init();
     // cute nub code
@@ -144,7 +149,15 @@ function render() {
         const cardWrapperEl = document.createElement('div')
         cardWrapperEl.classList.add('cardWrapperEl')
         const cardEl = document.createElement('div')
-        cardEl.classList.add('card', card.face);
+        if (card === dealer.hand[0]) {
+            cardEl.classList.add('card', 'back');
+            if (seeDealerCard) {
+              // game over
+              cardEl.classList.replace('back', card.face);
+            }
+        } else {
+            cardEl.classList.add('card', card.face);
+        }
         cardWrapperEl.append(cardEl)
         dealerCards.append(cardWrapperEl)
     })
@@ -176,6 +189,7 @@ function checkBust() {
         winner = "player"
         loser = "dealer"
         showBustScreen();
+        endgame();
     }
 }
 
@@ -183,20 +197,25 @@ function compareHands() {
     if (playerScore === dealerScore) {
         winner = "tie"
         showTieScreen()
+        endgame();
     } else if (playerScore > dealerScore) {
         winner = "player"
         loser = "dealer"
         showWinScreen()
+        endgame();
     } else {
         winner = "dealer"
         loser = "player"
         showLoseScreen()
+        endgame();
     }
 }
 
 function endgame() {
+    seeDealerCard = true;
     hitBtn.disabled = true;
     standBtn.disabled = true;
+    render();
 }
 function showBlackjackScreen() {
     message.innerText = 'Congrats! You hit Blackjack. You win!'
